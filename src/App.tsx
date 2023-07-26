@@ -1,47 +1,21 @@
 import './App.css';
-import {
-  QueryClient,
-  QueryClientProvider,
-  QueryFunction,
-  useQuery,
-} from 'react-query';
-import axios, { AxiosPromise, AxiosResponse } from 'axios';
-import { People, PeopleResponse } from './models/People';
-import { fetchPeople } from './api/people';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
-const queryClient = new QueryClient();
+import PeopleLoader from './components/PeopleLoader';
+import { Typography } from '@mui/material';
+import { ReactQueryClient } from './components/ReactQueryClient';
 
 function App() {
   return (
     <div className='App'>
       <body>
-        <QueryClientProvider client={queryClient}>
+        <ReactQueryClient>
+          <Typography variant='h1'>Starwars Characters</Typography>
           <PeopleLoader />
-        </QueryClientProvider>
+        </ReactQueryClient>
       </body>
     </div>
   );
 }
 
 export default App;
-
-function PeopleLoader() {
-  const { isLoading, error, data, isFetching } = useQuery<People[]>(
-    'people',
-    fetchPeople('https://swapi.dev/api/people')
-  );
-  if (isLoading || isFetching) {
-    return <>Loading...</>;
-  }
-  return <PeopleList people={data ?? []} />;
-}
-
-const PeopleList: React.FC<{ people: People[] }> = ({ people }) => {
-  return (
-    <>
-      {people.map((person) => (
-        <p>{person.name}</p>
-      ))}
-    </>
-  );
-};

@@ -1,5 +1,11 @@
 export interface People {
   name: string;
+  height: number;
+  mass: number;
+  created: string;
+  films: string[];
+  birth_year: string;
+  species: string[];
 }
 
 export interface PeopleResponse {
