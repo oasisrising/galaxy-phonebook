@@ -1,5 +1,4 @@
 import './App.css';
-import { QueryClient, QueryClientProvider } from 'react-query';
 
 import PeopleLoader from './components/PeopleLoader';
 import { Typography } from '@mui/material';

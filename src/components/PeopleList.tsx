@@ -5,32 +5,54 @@ import {
   ListItemText,
   Tooltip,
   Typography,
+  getContrastRatio,
 } from '@mui/material';
 import { People } from '../models/People';
 import { format } from 'date-fns';
+import { HUMAN } from '../constants';
 
-export const PeopleList: React.FC<{ people: People[] }> = ({ people }) => {
+export const PeopleList: React.FC<{
+  people: People[];
+  speciesColors: Map<string, string>;
+}> = ({ people, speciesColors }) => {
   return (
     <Grid container spacing={2}>
       {people.map((person) => (
         <Grid item>
-          <Tooltip title={<CharacterTooltip person={person} />}>
-            <Card
-              sx={{
-                padding: '0 16px',
-                height: '48px',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-              elevation={5}
-            >
-              <Typography>{person.name}</Typography>
-            </Card>
-          </Tooltip>
+          <CharacterCard person={person} speciesColors={speciesColors} />
         </Grid>
       ))}
     </Grid>
+  );
+};
+
+const WHITE = '#ffffff';
+const BLACK = '#000000';
+export const CharacterCard: React.FC<{
+  person: People;
+  speciesColors: Map<string, string>;
+}> = ({ person, speciesColors }) => {
+  const backgroundColor =
+    speciesColors.get(person.species.length > 0 ? person.species[0] : HUMAN) ??
+    BLACK;
+  const textColor =
+    getContrastRatio(BLACK, backgroundColor) < 4.5 ? WHITE : BLACK;
+  return (
+    <Tooltip title={<CharacterTooltip person={person} />}>
+      <Card
+        sx={{
+          padding: '0 16px',
+          height: '48px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: backgroundColor,
+        }}
+        elevation={5}
+      >
+        <Typography color={textColor}>{person.name}</Typography>
+      </Card>
+    </Tooltip>
   );
 };
 
